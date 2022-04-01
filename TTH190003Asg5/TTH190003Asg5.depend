@@ -1,0 +1,15 @@
+# depslib dependency file v1.0
+1617755498 source:c:\users\trent\desktop\utd 2021\cs1337\hw\tth190003asg5\tth190003asg5.cpp
+	<iostream>
+	<cstdlib>
+	<iomanip>
+	<fstream>
+	"Employee.h"
+	"FileIO.h"
+
+1617748784 c:\users\trent\desktop\utd 2021\cs1337\hw\tth190003asg5\employee.h
+	<iostream>
+
+1617750345 c:\users\trent\desktop\utd 2021\cs1337\hw\tth190003asg5\fileio.h
+	<iostream>
+

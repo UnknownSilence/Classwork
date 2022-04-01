@@ -1,0 +1,340 @@
+
+
+
+
+
+#include <iostream>
+#include <string>
+#include <algorithm>
+
+
+using namespace std;
+
+class Day
+{
+
+public :
+  static int daysInMonth[12];
+  enum month_t {jan, feb, mar, apr, may, jun, jul, aug, sep , oct, nov, dec };
+  static const std::string month_list[12] ;
+  const static int YEAR;
+
+  Day(int);
+  Day(std::string ,int );
+  void print(int num) const;
+  Day operator ++();
+  Day operator ++(int);
+  Day operator --();
+  Day operator --(int);
+  void recalculate();
+  std::string getMonth() const;
+  int getDay() const;
+  friend std::ostream& operator <<( std::ostream& , const Day&);
+public:
+  int day;
+  enum month_t month_of_day;
+  int day_of_month;
+};
+
+
+// Initialize the static members
+int Day::daysInMonth[]  = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+const string Day::month_list[] = {"january" , "february", "march", "april", "may", "june" , "july" , "august", "september","october","november","december"};
+const int Day::YEAR  = 2021;
+
+// Default constructor
+Day::Day(int num)
+{
+  this->day = num;
+  recalculate();
+}
+
+/**
+ * This method calculate the month and month day given "days"
+ * This is used whenever the default constructor ( Day(int) ) is used or
+ * any addition or decrement operators are used .
+ */
+void Day::recalculate()
+{
+  int tmp_days = this->day;
+  int monthNum = -1;
+  int remainingDays = this->day;
+  for ( int i=0 ; i < 12 ; i++ )
+  {
+    monthNum = i ;
+
+    if ( (remainingDays - this->daysInMonth[i] ) <= 0  )
+      break ;
+    else {
+      remainingDays = remainingDays - this->daysInMonth[i];
+      //cout << " Month " << month_list[monthNum]  << " remaining days " << remainingDays << "\n";
+    }
+  }
+
+  this->month_of_day = (month_t) monthNum;
+  day_of_month = remainingDays ;
+
+}
+
+/**
+int dayOfYear(string monthName, int dayNumber)
+{
+    // Extract the year, month and the
+    // day from the date string
+    int year = Day::YEAR;
+    int monthNum;
+
+    for(int i=0; i<12; i++)
+    {
+        if (Day::month_list[i] == monthName)
+        {
+           monthNum = i;
+        }
+    }
+
+
+    // If current year is a leap year and the date
+    // given is after the 28th of February then
+    // it must include the 29th February
+    if (monthNum > 2 && year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)) {
+        ++dayNumber;
+    }
+
+    // Add the days in the previous months
+    while (monthNum-- > 0) {
+        dayNumber = dayNumber + Day::daysInMonth[monthNum - 1];
+    }
+    return dayNumber;
+}
+**/
+
+
+
+// Overloaded constructor
+Day::Day(const string mnt ,const int day )
+{
+
+  this->day = 0;
+  day_of_month = day;
+  string month_str = mnt;
+
+  // convert to lower case and compare with the month_list
+  transform(month_str.begin(), month_str.end(), month_str.begin(), ::tolower);
+  for ( int i = 0 ; i < 12 ; i++ )
+  {
+    if ( month_str == month_list[i])
+    {
+      this->month_of_day = (month_t) i;
+      break;
+    }
+    this->day += daysInMonth[i] ;
+  }
+
+  this->day += day;
+
+}
+
+// THis method prints the month and date .
+void Day::print(int num) const
+{
+  cout << "day#=[" << num << "] " << month_list[month_of_day] << " " << day_of_month << endl;
+}
+
+
+// prefix ++ operator
+Day Day::operator++()
+{
+  if ( this->day + 1 > 365)
+  {
+    cout << "Date Overflow ";
+
+  } else {
+       this->day += 1;
+       recalculate();
+  }
+
+    return *this;
+}
+
+// post fix ++ operator
+Day Day::operator++(int)
+ {
+  Day tDay(this->day);
+  if ( this->day + 1 > 365)
+    {
+      cout << "Date Overflow ";
+
+    } else {
+         this->day += 1;
+         recalculate();
+    }
+
+      return tDay;
+
+
+
+ }
+
+
+// prefix -- operator
+Day Day::operator--()
+{
+  if (( this->day - 1 )<= 0)
+  {
+    cout << "Date Overflow ";
+
+  } else {
+       this->day -= 1;
+       recalculate();
+  }
+
+    return *this;
+}
+
+// post fix -- operator
+Day Day::operator--(int)
+ {
+  Day tDay(this->day);
+  if (( this->day - 1 )<= 0)
+    {
+      cout << "Date Overflow ";
+
+    } else {
+         this->day -= 1;
+         recalculate();
+    }
+
+      return tDay;
+
+
+
+ }
+
+
+
+string Day::getMonth() const
+{
+  return month_list[month_of_day];
+}
+
+int Day::getDay() const
+{
+  return day_of_month;
+}
+
+// overaloaded << operator
+ostream& operator << ( ostream& out , const Day& day )
+{
+  out << " " << day.getMonth()  << " " << day.getDay()  ;
+  return out;
+}
+
+
+void test_operators(string month, int dayNum) {
+
+Day TheDay(month, dayNum);
+
+cout<<"start with most recently entered day: "; TheDay.print(dayNum); cout<<endl;
+
+for (int i=0; i<5; ++i) {
+        cout<<" "; (--TheDay).print(TheDay.day);
+} cout<<endl;
+
+for (int i=0; i<5; ++i) {cout<<" "; (++TheDay).print(TheDay.day);} cout<<endl;
+
+for (int i=0; i<5; ++i) {cout<<" "; (TheDay++).print(TheDay.day);} cout<<endl;
+
+for (int i=0; i<5; ++i) {cout<<" "; (TheDay--).print(TheDay.day);} cout<<endl;
+
+cout<<"end at: "; TheDay.print(TheDay.day); cout<<endl;
+
+}
+
+
+
+int main()
+{
+
+   //Day cincoDeMayo("May", 5);
+   //cincoDeMayo.print();
+   //Day halfway(365/2); // creates an instance of class Day, called halfway, initialized to the day number 182
+   //halfway.print(); // dis
+   //Day d1("Dec",31);
+   //d1.print();
+
+
+   int recentDay;
+   string recentMonth;
+
+   while (true) {
+   cout << "options: d)ay [#d->m,d];  m)onth+day [m d->#d]; o)perator [+/-5]; v)arious; q)uit: d" << endl;
+   cout << "Choice: ";
+   char choice;
+   cin >> choice;
+   if (choice == 'd')
+   {
+    cout << "enter day of year# (-9 to quit): ";
+    int dayNum;
+    cin >> dayNum;
+    if (dayNum == -9) {
+        cout << "Quitting" << endl;
+    }
+    else {
+    Day TheDay(dayNum);
+    TheDay.print(dayNum);
+    }
+   }
+   else if (choice == 'm')
+   {
+    cout << "enter month day_of_month: (stop -9 to quit): ";
+    string month;
+    int dayNum;
+    cin >> month >> dayNum;
+
+    if (dayNum == -9 && month == "stop") {
+        cout << "Quitting" << endl;
+    }
+    else {
+    Day TheDay(month, dayNum);
+    recentDay = dayNum;
+    recentMonth = month;
+    dayNum = TheDay.day;
+    TheDay.print(dayNum);
+    }
+
+   }
+   else if (choice == 'o')
+   {
+    test_operators(recentMonth, recentDay);
+   }
+   else if (choice == 'v')
+   {
+
+
+   }
+   else if (choice == 'q')
+   {
+       cout << "Quitting" << endl;
+       break;
+       return 0;
+
+   }
+   else {
+    cout << "Invalid choice please try again.";
+   }
+
+
+   } // end of input loop
+
+    //cout << " d1 " << d1 << " pre Increment " << ++d1 << " post Increment " << d1++ << " current value" << d1 << "\n";
+
+    //cout << " d1 " << d1 << " pre Decrement " << --d1 << " post Decrement " << d1-- << " current value" << d1 << "\n";
+
+    //Day d2(1);
+    //d2.print();
+    //cout << " d2 " << d2 << " pre Decrement " << --d2 << " post Decrement " << d2-- << " current value" << d2 << "\n";
+
+
+
+    //test_operators();
+}

@@ -1,0 +1,9 @@
+# depslib dependency file v1.0
+1614361996 source:c:\users\trent\desktop\utd 2021\cs1337\hw\asg3\main.cpp
+	<iostream>
+	<string>
+	<iomanip>
+	<math.h>
+	<iostream>
+	<fstream>
+

@@ -1,0 +1,9 @@
+# depslib dependency file v1.0
+1619641055 source:c:\users\trent\desktop\utd 2021\cs1337\hw\asg7temp\main.cpp
+	<iostream>
+	<fstream>
+	<Bits.h>
+	<string>
+	<ios>
+	<ostream>
+

@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1619115619 source:c:\users\trent\desktop\utd 2021\cs1337\hw\tth190003asg6\tth190003asg6.cpp
+	<string>
+	<iostream>
+	<iomanip>
+

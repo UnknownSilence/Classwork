@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1620442966 source:c:\users\trent\desktop\utd 2021\cs1337\hw\chancehelp\main.cpp
+	<iostream>
+	<string>
+	<algorithm>
+
